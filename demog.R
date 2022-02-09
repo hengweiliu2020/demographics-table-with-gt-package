@@ -3,6 +3,9 @@ library(haven)
 library(psych)
 library(gt)
 
+the_date <- as.character(Sys.Date())
+
+
 # read in the data
 class <- read_sas("class.sas7bdat")
 
@@ -81,7 +84,7 @@ tab_source_note(
 ) %>%
 
 tab_source_note(
-    source_note = "Program Source: demog.R            Executed: (Draft) 2022-02-09"
+    source_note = paste('Program Source: demog.R            Executed: (Draft)',  the_date)
   ) %>%
 
 cols_label(
