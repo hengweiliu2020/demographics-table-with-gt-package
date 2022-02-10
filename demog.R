@@ -14,6 +14,11 @@ ht <- describeBy(class$Height, group=class$trt, mat=TRUE)
 wt <- describeBy(class$Weight, group=class$trt, mat=TRUE)
 
 # get the count and percentage
+bign <- table(group=class$trt)
+bign1 <- as.numeric(bign[1])
+bign2 <- as.numeric(bign[2])
+
+
 freq <- table(class$Sex, group=class$trt)
 prop <- 100*prop.table(table(class$Sex, class$trt), 2)
 
@@ -47,8 +52,8 @@ X12 <- paste(freq[,2], '(', format(prop[,2], digit=3), ')')
 sex <- cbind(X11, X12)
 
 # create a new column called statistics and get the final data for reporting 
-rownames(sex) <- c(' Female',' Male')
-rownames(ht2)  <- c(" n"," mean"," sd"," median"," min, max")
+rownames(sex) <- c('Female','Male')
+rownames(ht2)  <- c("n","mean","sd","median","min, max")
 
 sex3 <- data.frame(statistics=rownames(sex), sex)
 ht3 <- data.frame(statistics=rownames(ht2), ht2)
@@ -88,21 +93,26 @@ tab_source_note(
   ) %>%
 
 cols_label(
-  X11 = "Treatment A",
-  X12 = "Treatment B",
+  X11 = html(paste("Treatment A <br> (N=", bign1, ")")),
+  X12 = html(paste("Treatment B <br> (N=", bign2, ")"))
 ) %>%
 
 tab_options(
+  table.border.top.color = "white",
+  heading.border.bottom.color = "black",
+  table.border.bottom.color = "white",
+  table_body.border.bottom.color = "black",
+  table_body.hlines.color = "white", 
+  row_group.border.bottom.color = "white", 
+  row_group.border.top.color = "white", 
+  column_labels.border.top.color = "black",
+  column_labels.border.bottom.color = "black",
+) 
 
-  table_body.hlines.style = NULL,
-  table_body.hlines.width = NULL,
-  table_body.hlines.color = NULL, 
-)
-
-# output the RTF table
+# output the HTML table
 
 tab1 %>%
-gtsave("demog.rtf", path = "C:\\demog_R" )
+gtsave("demog.html", path = "C:\\demog_R" )
 
 
 
