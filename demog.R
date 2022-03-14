@@ -23,19 +23,19 @@ freq <- table(class$Sex, group=class$trt)
 prop <- 100*prop.table(table(class$Sex, class$trt), 2)
 
 # handle the decimals
-ht$n <- format(ht$n, digits=2)
-ht$mean <- format(ht$mean, digits=4)
-ht$sd <- format(ht$sd, digits=4)
-ht$median <- format(ht$median, digits=4)
-ht$min <- format(ht$min, digits=4)
-ht$max <- format(ht$max, digits=4)
+ht$n <- format(ht$n, nsmall=0)
+ht$mean <- format(round(ht$mean,2), nsmall=2)
+ht$sd <- format(round(ht$sd,3), nsmall=3)
+ht$median <- format(round(ht$median,2), nsmall=2)
+ht$min <- format(round(ht$min,1), nsmall=1)
+ht$max <- format(round(ht$max,1), nsmall=1)
 
-wt$n <- format(wt$n, digits=2)
-wt$mean <- format(wt$mean, digits=5)
-wt$sd <- format(wt$sd, digits=4)
-wt$median <- format(wt$median, digits=4)
-wt$min <- format(wt$min, digits=4)
-wt$max <- format(wt$max, digits=4)
+wt$n <- format(wt$n, nsmall=0)
+wt$mean <- format(round(wt$mean,2), nsmall=2)
+wt$sd <- format(round(wt$sd,3), nsmall=3)
+wt$median <- format(round(wt$median,2), nsmall=2)
+wt$min <- format(round(wt$min,1), nsmall=1)
+wt$max <- format(round(wt$max,1), nsmall=1)
 
 # create a variable minmax, and do transpose
 ht$minmax <- paste(ht$min, ',', ht$max) 
@@ -63,7 +63,7 @@ final <- rbind(ht3, wt3, sex3)
 
 
 # use gt to do the reporting 
-tab1 <- final %>% 
+tab_rtf <- final %>% 
   gt() %>%
   tab_row_group(
     label = "Sex",
@@ -96,22 +96,24 @@ cols_label(
   X11 = html(paste("Treatment A <br> (N=", bign1, ")")),
   X12 = html(paste("Treatment B <br> (N=", bign2, ")"))
 ) %>%
+  
+  tab_options(
+    table.border.top.color = "white",
+    heading.border.bottom.color = "black",
+    table.border.bottom.color = "white",
+    table_body.border.bottom.color = "black",
+    table_body.hlines.color = "white", 
+    row_group.border.bottom.color = "white", 
+    row_group.border.top.color = "white", 
+    column_labels.border.top.color = "black",
+    column_labels.border.bottom.color = "black",
+  )
 
-tab_options(
-  table.border.top.color = "white",
-  heading.border.bottom.color = "black",
-  table.border.bottom.color = "white",
-  table_body.border.bottom.color = "black",
-  table_body.hlines.color = "white", 
-  row_group.border.bottom.color = "white", 
-  row_group.border.top.color = "white", 
-  column_labels.border.top.color = "black",
-  column_labels.border.bottom.color = "black",
-) 
+# as_rtf(tab_rtf, page_numbering=c("header"))
 
 # output the HTML table
 
-tab1 %>%
+tab_rtf %>%
 gtsave("demog.html", path = "C:\\demog_R" )
 
 
